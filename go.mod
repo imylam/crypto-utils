@@ -3,6 +3,7 @@ module github.com/imylam/crypto-utils
 go 1.18
 
 require (
+	github.com/imylam/text-coder v0.0.0-20231006071032-43f1d3a209bb
 	github.com/stretchr/testify v1.8.4
 )
 
