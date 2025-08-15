@@ -21,12 +21,8 @@ type verifier struct {
 // with RSA public key using SHA256 and PKCS #1 v1.5 Sign Scheme.
 //
 // Implements signature.Verifier.
-func NewVerifier(
-	publicKey *rsa.PublicKey,
-	msgCoder textcoder.Coder,
-	sigCoder textcoder.Coder,
-) *verifier {
-	return &verifier{
+func NewVerifier(publicKey *rsa.PublicKey, msgCoder textcoder.Coder, sigCoder textcoder.Coder) verifier {
+	return verifier{
 		hash:       hash,
 		signScheme: signScheme,
 		publicKey:  publicKey,
@@ -36,15 +32,12 @@ func NewVerifier(
 }
 
 // Algo returns the algorithm used for verifying.
-func (s *verifier) Algo() string {
+func (s verifier) Algo() string {
 	return ALGO
 }
 
 // Verify message against signature.
-func (s *verifier) Verify(
-	msg string,
-	signature string,
-) (err error) {
+func (s verifier) Verify(msg string, signature string) (err error) {
 
 	msgBytes, err := s.msgCoder.Decode(msg)
 	if err != nil {

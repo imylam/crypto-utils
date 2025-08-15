@@ -25,12 +25,8 @@ type HS512 struct {
 // with secret using HMAC with SHA-512.
 //
 // Implements signature.Signer and signature.Verifier.
-func NewHS512(
-	key []byte,
-	msgCoder textcoder.Coder,
-	sigCoder textcoder.Coder,
-) *HS512 {
-	hs512 := &HS512{
+func NewHS512(key []byte, msgCoder textcoder.Coder, sigCoder textcoder.Coder) HS512 {
+	hs512 := HS512{
 		key:      key,
 		msgCoder: msgCoder,
 		sigCoder: sigCoder,
@@ -39,12 +35,12 @@ func NewHS512(
 }
 
 // Algo returns the algorithm used for signing/verifying.
-func (s *HS512) Algo() (algo string) {
+func (s HS512) Algo() (algo string) {
 	return ALGO
 }
 
 // Sign message and return signature.
-func (s *HS512) Sign(msg string) (signature string, err error) {
+func (s HS512) Sign(msg string) (signature string, err error) {
 	msgBytes, err := s.msgCoder.Decode(msg)
 	if err != nil {
 		err = fmt.Errorf("failed to decode message: %w", err)
@@ -58,7 +54,7 @@ func (s *HS512) Sign(msg string) (signature string, err error) {
 }
 
 // Verify message against signature.
-func (s *HS512) Verify(msg, signature string) (err error) {
+func (s HS512) Verify(msg, signature string) (err error) {
 	messageBytes, err := s.msgCoder.Decode(msg)
 	if err != nil {
 		err = fmt.Errorf("failed to decode message: %w", err)

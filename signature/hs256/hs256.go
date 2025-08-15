@@ -25,12 +25,8 @@ type HS256 struct {
 // with secret using HMAC with SHA-256.
 //
 // Implements signature.Signer and signature.Verifier.
-func NewHS256(
-	key []byte,
-	msgCoder textcoder.Coder,
-	sigCoder textcoder.Coder,
-) *HS256 {
-	hs256 := &HS256{
+func NewHS256(key []byte, msgCoder textcoder.Coder, sigCoder textcoder.Coder) HS256 {
+	hs256 := HS256{
 		key:      key,
 		msgCoder: msgCoder,
 		sigCoder: sigCoder,
@@ -39,12 +35,12 @@ func NewHS256(
 }
 
 // Algo returns the algorithm used for signing/verifying.
-func (s *HS256) Algo() (algo string) {
+func (s HS256) Algo() (algo string) {
 	return ALGO
 }
 
 // Sign message and return signature.
-func (s *HS256) Sign(msg string) (signature string, err error) {
+func (s HS256) Sign(msg string) (signature string, err error) {
 	msgBytes, err := s.msgCoder.Decode(msg)
 	if err != nil {
 		err = fmt.Errorf("failed to decode message: %w", err)
@@ -58,7 +54,7 @@ func (s *HS256) Sign(msg string) (signature string, err error) {
 }
 
 // Verify message against signature.
-func (s *HS256) Verify(msg, signature string) (err error) {
+func (s HS256) Verify(msg, signature string) (err error) {
 	messageBytes, err := s.msgCoder.Decode(msg)
 	if err != nil {
 		err = fmt.Errorf("failed to decode message: %w", err)
